@@ -1,4 +1,4 @@
-import 'preact/debug'; // <-- Add this line at the top of your main entry file
+// import 'preact/debug'; // <-- Add this line at the top of your main entry file
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';

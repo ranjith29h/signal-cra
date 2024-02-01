@@ -1,10 +1,8 @@
-import { computed, batch, useSignal } from '@preact/signals-react';
+import { computed, useSignalEffect } from '@preact/signals-react';
 import { todos, addTodo, removeTodo } from './global.store';
-import { memo, useState } from 'react';
+import { useState } from 'react';
 
 const TodoItem = ({ todo, idx }) => {
-	// console.log(todo);
-	// useSignal();
 	return (
 		<li>
 			<input
@@ -24,8 +22,11 @@ const TodoItem = ({ todo, idx }) => {
 };
 
 export default function TodoList() {
-	useSignal();
 	const [text, setText] = useState('');
+	useSignalEffect(() => {
+		console.log('todos', todos.value);
+		setText(text);
+	});
 
 	const completedCount = computed(() => {
 		return todos.value.filter((todo) => todo.completed).length;
