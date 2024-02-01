@@ -1,13 +1,8 @@
-import "./App.css";
-import { AppStateProvider } from "./AppStateContext";
-import TodoList from "./TodoList";
+import './App.css';
+import TodoList from './TodoList';
 
 function App() {
-  return (
-    <AppStateProvider>
-      <TodoList />
-    </AppStateProvider>
-  );
+	return <TodoList />;
 }
 
 export default App;
