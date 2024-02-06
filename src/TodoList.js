@@ -1,55 +1,52 @@
-import { signal, computed, batch, useSignal } from "@preact/signals-react";
-import { useAppState } from "./AppStateContext";
+import { todos, addTodo, removeTodo, completedCount } from './global.store';
+import { useState } from 'react';
 
-const newItem = signal("");
+const TodoItem = ({ todo }) => {
+	return (
+		<li>
+			<input
+				type='checkbox'
+				checked={todo.completed}
+				onChange={() => {
+					todo.completed = !todo.completed;
+					todos.value = [...todos.value];
+				}}
+			/>
+			{todo.completed ? <s>{todo.text}</s> : todo.text}{' '}
+			<button style={{ marginLeft: '10px', color: 'red' }} onClick={() => removeTodo(todo.text)}>
+				x
+			</button>
+		</li>
+	);
+};
+
 export default function TodoList() {
-  const { todos, addTodo, removeTodo } = useAppState();
-  const completedCount = computed(() => {
-    return todos.value.filter((todo) => todo.completed).length;
-  });
+	const [text, setText] = useState('');
 
-  useSignal();
+	const onInput = (event) => {
+		setText(event.target.value);
+	};
 
-  const onInput = (event) => (newItem.value = event.target.value);
+	const onAddClick = () => {
+		addTodo(text);
+		setText('');
+	};
 
-  const onAddClick = () => {
-    batch(() => {
-      addTodo(newItem);
-      newItem.value = "";
-    });
-  };
+	return (
+		<div style={{ textAlign: 'center' }}>
+			<h1>Todo List</h1>
+			<p>Add a new todo:</p>
+			<input type='text' value={text} onInput={onInput} />
+			<button style={{ marginLeft: '10px' }} onClick={onAddClick}>
+				Add+
+			</button>
 
-  return (
-    <>
-      <input type="text" value={newItem.value} onInput={onInput} />
-      <button style={{ marginLeft: "10px" }} onClick={onAddClick}>
-        Add
-      </button>
-
-      <ul style={{ textAlign: "left" }}>
-        {todos.value.map((todo, index) => {
-          return (
-            <li>
-              <input
-                type="checkbox"
-                checked={todo.completed}
-                onInput={() => {
-                  todo.completed = !todo.completed;
-                  todos.value = [...todos.value];
-                }}
-              />
-              {todo.completed ? <s>{todo.text}</s> : todo.text}{" "}
-              <button
-                style={{ marginLeft: "10px", color: "red" }}
-                onClick={() => removeTodo(index)}
-              >
-                x
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-      <p>Completed count: {completedCount.value}</p>
-    </>
-  );
+			<ul style={{ textAlign: 'center', alignContent: 'center', marginTop: '20px' }}>
+				{todos.value.map((todo, index) => (
+					<TodoItem key={index} todo={todo} idx={index} />
+				))}
+			</ul>
+			<p>Completed count: {completedCount.value}</p>
+		</div>
+	);
 }

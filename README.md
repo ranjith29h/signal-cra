@@ -1,3 +1,29 @@
+Change Bable config to introduce reactivity in the CRA based react app.
+
+<b>step1</b> : `npm install react-app-rewired customize-cra --save-dev`
+<b>step2</b> : change the scripts in package.json
+```
+"scripts": {
+  "start": "react-app-rewired start",
+  "build": "react-app-rewired build",
+  "test": "react-app-rewired test",
+  "eject": "react-scripts eject"
+}
+```
+<b>step 3</b>: Create a `config-overrides.js` file in your project root and use it to modify the Babel config:
+```
+const { override, addBabelPlugins } = require('customize-cra');
+
+module.exports = override(
+	...addBabelPlugins(
+		// Your Babel plugin(s) here
+		'module:@preact/signals-react-transform'
+	)
+	// You can add more customization here
+);
+
+```
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
